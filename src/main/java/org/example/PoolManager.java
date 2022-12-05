@@ -11,11 +11,11 @@ public class PoolManager {
     private BlockingQueue taskQueue = null;
     private List<PoolThread> runnables = new ArrayList<>();
     private boolean isStopped = false;
-    private int threadCounter;
+    public static Integer taskCounter;
 
     public PoolManager(int numOfThreads, int maxNumOfTasks) {
         taskQueue = new ArrayBlockingQueue(maxNumOfTasks);
-        threadCounter = numOfThreads;
+        taskCounter = maxNumOfTasks;
         for (int i = 0; i < numOfThreads; ++i) {
             PoolThread poolThread = new PoolThread(taskQueue);
             runnables.add(new PoolThread(taskQueue));
@@ -39,7 +39,7 @@ public class PoolManager {
     }
 
     public synchronized void waitUntilAllTaskFinished() {
-        while(this.taskQueue.size() > 0) {
+        while(!(taskCounter == 0 && taskQueue.isEmpty())) {
             try {
                 Thread.sleep(1);
             } catch (InterruptedException e) {

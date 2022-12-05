@@ -5,7 +5,7 @@ import java.util.Random;
 public class PoolClient {
     public static void main(String[] args) throws Exception{
         final int numOfThreads = 3;
-        final int maxNamOfTasks = 10;
+        final int maxNamOfTasks = 20;
         long startTime = startTime = System.currentTimeMillis();
         PoolManager poolManager = new PoolManager(numOfThreads, maxNamOfTasks);
 
