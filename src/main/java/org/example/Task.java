@@ -1,6 +1,29 @@
 package org.example;
 
-public class Task {
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+
+public class Task implements Runnable{
+   private final int num;
+   int [][] matrix;
+   public Task(int n) {
+    /*   for(int i = 0; i < n; ++i) {
+           for (int j = 0; j < n; ++j) {
+               matrix[][]
+           }
+       }*/
 
 
+
+
+       num = n;
+   }
+    @Override
+    public void run() {
+        double a = 10.2f;
+        for (int i = 0; i < num; ++i) {
+            a = a + 2.2f ;
+        }
+        System.out.println("The result is " + a + " by " + Thread.currentThread().getName());
+    }
 }
