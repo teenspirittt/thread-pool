@@ -6,7 +6,7 @@ public class PoolClient {
     public static void main(String[] args) throws Exception{
         final int numOfThreads = 3;
         final int maxNamOfTasks = 20;
-        long startTime = startTime = System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
         PoolManager poolManager = new PoolManager(numOfThreads, maxNamOfTasks);
 
         for(int i = 0; i < maxNamOfTasks; ++i) {
