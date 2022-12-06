@@ -3,17 +3,14 @@ package org.example;
 import java.util.Random;
 
 public class PoolClient {
-    public static void main(String[] args) throws Exception{
-        final int numOfThreads = 3;
-        final int maxNamOfTasks = 20;
+    public static void main(String[] args) throws Exception {
+        final int numOfThreads = 5;
+        final int maxNumOfTasks = 40;
         long startTime = System.currentTimeMillis();
-        PoolManager poolManager = new PoolManager(numOfThreads, maxNamOfTasks);
+        PoolManager poolManager = new PoolManager(numOfThreads, maxNumOfTasks);
 
-        for(int i = 0; i < maxNamOfTasks; ++i) {
-            int taskNo = i;
-
+        for (int i = 0; i < maxNumOfTasks; ++i)
             poolManager.execute(new Task(new Random().nextInt(100000000 - 90000000) + 90000000));
-        }
 
         poolManager.waitUntilAllTaskFinished();
         poolManager.shutdown();

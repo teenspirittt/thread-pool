@@ -1,8 +1,7 @@
 package org.example;
 
-import java.util.Random;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
+
 
 public class PoolThread implements Runnable {
     private Thread thread = null;
@@ -22,11 +21,10 @@ public class PoolThread implements Runnable {
             try {
                 Runnable runnable = (Runnable) taskQueue.take();
                 runnable.run();
-                synchronized(PoolManager.taskCounter) {
+                synchronized (PoolManager.taskCounter) {
                     System.out.println(PoolManager.taskCounter);
                     PoolManager.taskCounter--;
                 }
-
             } catch (Exception e) {
 
             }
@@ -42,7 +40,6 @@ public class PoolThread implements Runnable {
     public synchronized boolean isStopped() {
         return isStopped;
     }
-
 }
 
 
