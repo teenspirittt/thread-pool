@@ -16,13 +16,14 @@ public class PoolManager {
     public PoolManager(int numOfThreads, int maxNumOfTasks) {
         taskQueue = new ArrayBlockingQueue(maxNumOfTasks);
         taskCounter = maxNumOfTasks;
-        for (int i = 0; i < numOfThreads; ++i) {
-            PoolThread poolThread = new PoolThread(taskQueue);
+
+        for (int i = 0; i < numOfThreads; ++i)
             runnables.add(new PoolThread(taskQueue));
-        }
-        for (PoolThread runnable : runnables) {
+
+        for (PoolThread runnable : runnables)
             new Thread(runnable).start();
-        }
+
+
     }
 
     public synchronized void execute(Runnable task) {
@@ -47,7 +48,4 @@ public class PoolManager {
             }
         }
     }
-
-    
-
 }

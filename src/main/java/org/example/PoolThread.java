@@ -11,7 +11,6 @@ public class PoolThread implements Runnable {
 
     public PoolThread(BlockingQueue queue) {
         taskQueue = queue;
-
     }
 
     @Override
