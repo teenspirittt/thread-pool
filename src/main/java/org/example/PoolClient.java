@@ -7,8 +7,8 @@ import java.util.concurrent.BlockingQueue;
 public class PoolClient {
     static Integer ost;
     public static void main(String[] args) throws Exception {
-        final int numOfThreads = 10;
-        final int maxNumOfTasks = 1000;
+        final int numOfThreads = 10000;
+        final int maxNumOfTasks = 100000;
         long startTime = System.currentTimeMillis();
         PoolManager poolManager = new PoolManager(numOfThreads, maxNumOfTasks);
 

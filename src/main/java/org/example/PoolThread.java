@@ -22,7 +22,7 @@ public class PoolThread implements Runnable {
                 runnable.run();
                 synchronized (PoolManager.taskCounter) {
                     System.out.println(PoolManager.taskCounter);
-                    PoolManager.taskCounter--;
+                    PoolManager.taskCounter.getAndDecrement();
                 }
             } catch (Exception e) {
 
