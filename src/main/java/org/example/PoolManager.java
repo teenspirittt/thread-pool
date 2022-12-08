@@ -9,7 +9,7 @@ import java.util.concurrent.BlockingQueue;
 
 public class PoolManager {
     private BlockingQueue taskQueue = null;
-    private List<PoolThread> runnables = new ArrayList<>();
+    private final List<PoolThread> runnables = new ArrayList<>();
     private boolean isStopped = false;
     public static Integer taskCounter;
 
