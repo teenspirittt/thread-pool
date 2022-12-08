@@ -13,6 +13,7 @@ public class PoolThread implements Runnable {
         taskQueue = queue;
     }
 
+    /* Выполнение и взятие из очереди задания не занятым потоком*/
     @Override
     public void run() {
         this.thread = Thread.currentThread();
@@ -21,7 +22,6 @@ public class PoolThread implements Runnable {
                 Runnable runnable = (Runnable) taskQueue.take();
                 runnable.run();
                 synchronized (PoolManager.taskCounter) {
-                    System.out.println(PoolManager.taskCounter);
                     PoolManager.taskCounter.getAndDecrement();
                 }
             } catch (Exception e) {
@@ -30,9 +30,9 @@ public class PoolThread implements Runnable {
         }
     }
 
+    /* Остановка потока */
     public synchronized void doStop() {
         isStopped = true;
-        System.out.println("potok " + this.thread.getName() + "umer");
         this.thread.interrupt();
     }
 

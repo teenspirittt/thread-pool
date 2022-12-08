@@ -2,22 +2,27 @@ package org.example;
 
 import java.util.Random;
 
-public class Task implements Runnable{
-   private final int num;
+public class Task implements Runnable {
+    private final int num;
 
-   public Task(int n) {
-       num = n;
-   }
+    public Task(int n) {
+        num = n;
+    }
+
+    public Task() {
+        num = 0;
+    }
+
     @Override
     public void run() {
         try {
-            Thread.sleep(1000);
+            // Искуственная нагрузка в виде "усыпления" потока на 2 секунды
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("The result is " + " by " + Thread.currentThread().getName());
-       /* synchronized (PoolClient.ost) {
-            PoolClient.ost--;
+        /*synchronized (PoolClient.ost) {
+            PoolClient.ost.getAndDecrement();
         }*/
 
     }
