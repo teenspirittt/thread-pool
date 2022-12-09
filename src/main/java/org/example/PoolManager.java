@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class PoolManager {
 
-    private BlockingQueue taskQueue = null;
+    private BlockingQueue<Task> taskQueue = null;
     private final List<PoolThread> runnables = new ArrayList<>();
     private boolean isStopped = false;
     public static AtomicInteger taskCounter = new AtomicInteger();
@@ -23,17 +23,12 @@ public class PoolManager {
             runnables.add(new PoolThread(taskQueue));
 
         // Запуск выполнения доступных заданий
-        for (PoolThread runnable : runnables) {
-            new Thread(runnable).start();
-            System.out.println("Новый поток");
-        }
-
-
+        runnables.forEach(runnable -> new Thread(runnable).start());
     }
 
 
     /* Runnable помещается в очередь ожидая исключения из очереди */
-    public synchronized void execute(Runnable task) {
+    public synchronized void execute(Task task) {
         if (this.isStopped) throw
                 new IllegalStateException("Thread pool is stopped");
         this.taskQueue.offer(task);

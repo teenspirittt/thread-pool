@@ -1,24 +1,65 @@
 package org.example;
 
 
+
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class PoolClient {
-    static AtomicInteger ost = new AtomicInteger();
+    public static AtomicInteger ost = new AtomicInteger();
+    public static AtomicLong sum = new AtomicLong();
 
     public static void main(String[] args) throws Exception {
         final int numOfThreads = 10;
-        final int maxNumOfTasks = 100;
+        final int maxNumOfTasks = 1000;
         long startTime = System.currentTimeMillis();
 
         // Создание пула потоков
         PoolManager poolManager = new PoolManager(numOfThreads, maxNumOfTasks);
         for (int i = 0; i < maxNumOfTasks; ++i)
-            poolManager.execute(new Task());
+            poolManager.execute(new Task() {
+                @Override
+                public void onFinish() {
+                    sum.addAndGet(System.currentTimeMillis() - startTime);
+                }
+
+                @Override
+                public void run() {
+                        double num = 0.1f;
+                        for(int i = 0; i < 10000000;++i) {
+                            num = num + Math.pow(num,0.5);
+                        }
+
+                      /*synchronized (PoolClient.ost) {
+                        PoolClient.ost.getAndDecrement();
+                        }*/
+                    System.out.println(num);
+                }
+            });
         poolManager.waitUntilAllTaskFinished();
         poolManager.shutdown();
 
-        // Тестирование обычных потоков
+
+
+
+        /* Создание переменных для мониторинга выделяемой памяти и времени выполнения */
+        long usedBytes = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+       // long endTime = System.currentTimeMillis() - startTime;
+        printInfo(usedBytes, sum.get(), numOfThreads);
+
+
+    }
+
+    public static void printInfo(long bytes, long time, int numOfThreads) {
+        System.out.println("Num of threads:" + numOfThreads + "\nTotal execution time: " + time + " ms\n" +
+                "Delay: " + time/numOfThreads +"\nTotal memory used: " + bytes / 1048576 + "mb");
+
+    }
+}
+
+
+
+// Тестирование обычных потоков
        /* BlockingQueue taskQueue = new ArrayBlockingQueue(maxNumOfTasks);
 
         ost.set(maxNumOfTasks);
@@ -36,16 +77,3 @@ public class PoolClient {
         }
         System.out.println("Create threads: "  + threadEndTime);
         */
-
-        /* Создание переменных для мониторинга выделяемой памяти и времени выполнения */
-        long usedBytes = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-        long endTime = System.currentTimeMillis() - startTime;
-        printInfo(usedBytes, endTime);
-    }
-
-    public static void printInfo(long bytes, long time) {
-        System.out.println("Execution time: " + time + " ms\n" +
-                "Total memory used: " + bytes / 1048576 + "mb");
-
-    }
-}

@@ -5,7 +5,7 @@ import java.util.concurrent.BlockingQueue;
 
 public class PoolThread implements Runnable {
     private Thread thread = null;
-    private BlockingQueue taskQueue = null;
+    public BlockingQueue<Task> taskQueue = null;
     private boolean isStopped = false;
 
 
@@ -19,13 +19,13 @@ public class PoolThread implements Runnable {
         this.thread = Thread.currentThread();
         while (!isStopped) {
             try {
-                Runnable runnable = (Runnable) taskQueue.take();
+                Task runnable = taskQueue.take();
                 runnable.run();
+                runnable.onFinish();
                 synchronized (PoolManager.taskCounter) {
                     PoolManager.taskCounter.getAndDecrement();
                 }
             } catch (Exception e) {
-
             }
         }
     }
