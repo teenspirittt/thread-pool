@@ -1,17 +1,16 @@
 package org.example;
 
 
-
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class PoolClient {
     public static AtomicInteger ost = new AtomicInteger();
-    public static AtomicLong sum = new AtomicLong();
+    public static AtomicLong sum = new AtomicLong(0);
 
     public static void main(String[] args) throws Exception {
         final int numOfThreads = 10;
-        final int maxNumOfTasks = 1000;
+        final int maxNumOfTasks = 100;
         long startTime = System.currentTimeMillis();
 
         // Создание пула потоков
@@ -21,19 +20,19 @@ public class PoolClient {
                 @Override
                 public void onFinish() {
                     sum.addAndGet(System.currentTimeMillis() - startTime);
+                    System.out.println(sum + " " + (System.currentTimeMillis() - startTime));
                 }
 
                 @Override
                 public void run() {
-                        double num = 0.1f;
-                        for(int i = 0; i < 10000000;++i) {
-                            num = num + Math.pow(num,0.5);
-                        }
+                    double num = 0.1f;
+                    for (int i = 0; i < 10000000; ++i) {
+                        num = num + Math.pow(num, 0.5);
+                    }
 
                       /*synchronized (PoolClient.ost) {
                         PoolClient.ost.getAndDecrement();
                         }*/
-                    System.out.println(num);
                 }
             });
         poolManager.waitUntilAllTaskFinished();
@@ -44,19 +43,14 @@ public class PoolClient {
 
         /* Создание переменных для мониторинга выделяемой памяти и времени выполнения */
         long usedBytes = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-       // long endTime = System.currentTimeMillis() - startTime;
-        printInfo(usedBytes, sum.get(), numOfThreads);
+        long endTime = System.currentTimeMillis() - startTime;
 
+        System.out.println("Num of tasks:" + maxNumOfTasks + "\nTotal execution time: " + endTime + " ms\n" +
+                "Delay: " + sum.get() / maxNumOfTasks + "\nTotal memory used: " + usedBytes / 1048576 + "mb");
 
-    }
-
-    public static void printInfo(long bytes, long time, int numOfThreads) {
-        System.out.println("Num of threads:" + numOfThreads + "\nTotal execution time: " + time + " ms\n" +
-                "Delay: " + time/numOfThreads +"\nTotal memory used: " + bytes / 1048576 + "mb");
 
     }
 }
-
 
 
 // Тестирование обычных потоков

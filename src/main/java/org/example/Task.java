@@ -8,15 +8,6 @@ public abstract class Task implements Runnable {
     public Task() {
         time = System.currentTimeMillis();
     }
+    public  abstract void onFinish();
 
-    public  void onFinish() {
-
-    }
-
-
-
-    @Override
-    public void run() {
-
-    }
 }
