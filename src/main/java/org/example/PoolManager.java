@@ -23,7 +23,9 @@ public class PoolManager {
             runnables.add(new PoolThread(taskQueue));
 
         // Запуск выполнения доступных заданий
-        runnables.forEach(runnable -> new Thread(runnable).start());
+        for (PoolThread runnable : runnables) {
+            new Thread(runnable).start();
+        }
     }
 
 
